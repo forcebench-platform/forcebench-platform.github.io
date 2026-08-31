@@ -14,7 +14,9 @@
 var FB = (function () {
 
   /* 相对于 web/*.html 的路径 */
-  var REAL_URL = 'https://raw.githubusercontent.com/forcebench-platform/ForceBench/main/results/leaderboard.json';
+  // 代码仓库双盲期间为 private，raw 地址不可匿名访问；此处改读站点内快照。
+  // 数据唯一真相仍是代码仓库的 results/leaderboard.json——更新榜单时同步拷贝到这里。
+  var REAL_URL = 'results/leaderboard.json';
   var SAMPLE_URL = './sample_leaderboard.json';
 
   var EXPECTED_SCHEMA = 'forcebench-results-v1';
