@@ -1,126 +1,259 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leaderboard —— ForceBench</title>
-<meta name="description" content="ForceBench v0.1 原型 leaderboard：逐任务成功率与 Clopper-Pearson 95% 置信区间，含评测覆盖率、缺格标注与 Fisher 精确检验。">
+<title>Paper Results — ForceBench</title>
+<meta name="description" content="ForceBench submitted-paper results: 10 systems across 8 simulation tasks and 8 systems across 5 real-world tasks. Submitted to ICRA 2027.">
 <link rel="stylesheet" href="./assets/style.css">
+<link rel="stylesheet" href="./assets/paper-results.css">
 </head>
-<body data-page="leaderboard">
-<a class="skip-link" href="#main">跳到正文</a>
-
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="./index.html">ForceBench <span class="ver">v0.1 原型</span></a>
-    <nav class="site-nav" aria-label="主导航">
-      <ul>
-        <li><a href="./index.html" data-nav="home">首页</a></li>
-        <li><a href="./leaderboard.html" data-nav="leaderboard">Leaderboard</a></li>
-        <li><a href="./tasks.html" data-nav="tasks">任务说明</a></li>
-        <li><a href="https://github.com/forcebench-platform/ForceBench/tree/main/docs">文档<span class="ext-mark" aria-hidden="true">↗</span><span class="visually-hidden">（GitHub 上的 markdown 文档，外部链接）</span></a></li>
-        <li><span class="nav-pending">论文<span class="pending-mark">准备中</span><span class="visually-hidden">：论文尚未发表，因此没有链接</span></span></li>
-        <li><a href="./about.html" data-nav="about">关于与引用</a></li>
-      </ul>
+<body data-page="paper-results">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap">
+  <a class="brand" href="./index.html"><span><span class="brand-force">Force</span><span class="brand-bench">Bench</span></span></a>
+  <nav class="site-nav" aria-label="Main navigation"><ul>
+    <li><a href="./index.html">Home</a></li>
+    <li><a href="./leaderboard.html" aria-current="page">Results</a></li>
+    <li><a href="./tasks.html">Tasks</a></li>
+    <li><a href="./doc/index.html">Documentation</a></li>
+    <li><a href="./about.html">About &amp; citation</a></li>
+  </ul></nav>
+</div></header>
+<main id="main"><div class="wrap">
+  <section class="results-intro">
+    <p class="eyebrow">Submitted to ICRA 2027 · September 2026</p>
+    <h1>How should a policy use force?</h1>
+    <p class="lede">Results from <em>ForceBench: Benchmarking Force Integration for Robotic Manipulation</em>.
+      Seven configurations share a π₀.₅ backbone to compare a no-force baseline with six force integration designs.
+      Additional reference systems are reported separately.</p>
+    <p class="table-note">The shared-backbone comparison includes changes in representation, normalization, capacity, and insertion location. Temporal designs serve as separate reference points; the predictive variant retains the Token Fusion input pathway.</p>
+    <nav class="section-links" aria-label="Results sections">
+      <a href="#simulation">Simulation results ↓</a><a href="#real-world">Real-world results ↓</a><a href="./results/leaderboard.json" download>Download results JSON</a>
     </nav>
-  </div>
-</header>
-
-<div class="prototype-banner" role="note">
-  <div class="wrap">
-    <span class="tag">原型</span>
-    <p><b>v0.1 原型榜单，请勿引用。</b>评测覆盖不完整，仍有「任务 × 模型」组合从未跑过；
-    已有结果的样本量为 100，置信区间很宽；个别结果可能被判定为无效。这张表上的数字<b>还会变</b>，
-    不构成模型排名，也不适合写进论文或对外比较。</p>
-  </div>
-</div>
-
-<main id="main">
-  <div class="wrap">
-    <h1>Leaderboard</h1>
-    <p class="lede">每个任务 × 每个模型一格。成功率来自固定 seed 的 rollout 评测，
-    每格都给出 Clopper-Pearson 95% 精确二项置信区间。缺格与无效结果按原样标注，不做任何填补。
-    任务与模型的名单以 <code>results/leaderboard.json</code> 为准，具体格数见下方覆盖率面板。</p>
-
-    <div id="lb-root">
-      <p class="loading">正在读取 <code>results/leaderboard.json</code> ……</p>
+    <div class="result-highlights">
+      <article><span class="metric">35.31<span>%</span></span><h2>Prompt Fusion · simulation</h2><p>Highest observed mean across eight tasks; no-force baseline: 23.25%.</p></article>
+      <article><span class="metric">63.00<span>%</span></span><h2>Prompt / Dual-Path · real world</h2><p>Tied highest observed mean across five tasks; no-force baseline: 40.00%.</p></article>
+      <article><span class="metric">3 <span>categories</span></span><h2>Benefits depend on the task</h2><p>Physical-property inference, resistance-dependent interaction, and contact-rich assembly.</p></article>
     </div>
-
-    <h2>怎么读这张表</h2>
+  </section>
+  <section id="simulation" class="study-section" aria-labelledby="simulation-heading">
+    <div class="section-heading"><div><p class="eyebrow">Table I · 16,000 evaluation episodes</p><h2 id="simulation-heading">Simulation</h2></div><p class="sample-size">10 systems · 8 tasks<br><b>200 episodes per task–method pair</b></p></div>
+    <p class="table-note">Bold marks the best observed rate among the seven π₀.₅ configurations. Additional references stay in a separate block; π₀ reaches 36.0% on Nut Thread, versus 34.0% for the best π₀.₅ configuration. Click a column heading to sort within each block.</p>
+    <div class="table-scroll" role="region" aria-label="Simulation results table, scroll horizontally for all tasks" tabindex="0">
+<table id="table-simulation" class="paper-table">
+<caption>Table I. Task success rates (%). Mean weights every task equally.</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button" data-sort="name">Method <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="0">Weight Sort <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="1">CoM Sort <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="2">Faucet Turn <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="3">Faucet Direction <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="4">Stove Turn <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="5">Stove Press <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="6">Drawer Pull <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="7">Nut Thread <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="mean">Mean <span aria-hidden="true">↕</span></button></th></tr></thead>
+<tbody data-group="controlled_pi05"><tr class="group-label"><th colspan="10" scope="rowgroup">Shared-backbone comparison · π₀.₅</th></tr>
+<tr data-method="pi05_no_force" data-order="0" data-name="π₀.₅ (No Force)" data-values="54.0,45.5,9.5,31.5,8.5,1.0,4.5,31.5" data-mean="23.25"><th scope="row">π₀.₅ (No Force)</th>
+<td>54.0</td>
+<td>45.5</td>
+<td>9.5</td>
+<td>31.5</td>
+<td>8.5</td>
+<td>1.0</td>
+<td>4.5</td>
+<td>31.5</td>
+<td class="mean-cell">23.25</td></tr>
+<tr data-method="token_fusion" data-order="1" data-name="Token Fusion" data-values="50.5,50.0,12.0,28.5,6.0,2.5,13.0,26.0" data-mean="23.56"><th scope="row">Token Fusion</th>
+<td>50.5</td>
+<td>50.0</td>
+<td>12.0</td>
+<td>28.5</td>
+<td>6.0</td>
+<td>2.5</td>
+<td>13.0</td>
+<td>26.0</td>
+<td class="mean-cell">23.56</td></tr>
+<tr data-method="prompt_fusion" data-order="2" data-name="Prompt Fusion" data-values="88.0,56.5,21.0,41.5,16.0,2.5,23.0,34.0" data-mean="35.31"><th scope="row">Prompt Fusion</th>
+<td>88.0</td>
+<td>56.5</td>
+<td>21.0</td>
+<td><strong>41.5</strong></td>
+<td>16.0</td>
+<td>2.5</td>
+<td><strong>23.0</strong></td>
+<td><strong>34.0</strong></td>
+<td class="mean-cell"><strong>35.31</strong></td></tr>
+<tr data-method="cross_attention" data-order="3" data-name="Cross-Attention" data-values="54.5,51.0,6.5,33.0,5.5,2.5,6.5,17.5" data-mean="22.13"><th scope="row">Cross-Attention</th>
+<td>54.5</td>
+<td>51.0</td>
+<td>6.5</td>
+<td>33.0</td>
+<td>5.5</td>
+<td>2.5</td>
+<td>6.5</td>
+<td>17.5</td>
+<td class="mean-cell">22.13</td></tr>
+<tr data-method="token_fusion_pred" data-order="4" data-name="Token Fusion + Pred" data-values="78.0,48.5,13.5,32.5,6.0,1.0,4.0,26.5" data-mean="26.25"><th scope="row">Token Fusion + Pred</th>
+<td>78.0</td>
+<td>48.5</td>
+<td>13.5</td>
+<td>32.5</td>
+<td>6.0</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>26.5</td>
+<td class="mean-cell">26.25</td></tr>
+<tr data-method="temporal_prompt" data-order="5" data-name="Temporal Prompt" data-values="90.0,69.5,17.5,31.0,7.0,21.5,2.5,22.0" data-mean="32.63"><th scope="row">Temporal Prompt</th>
+<td>90.0</td>
+<td>69.5</td>
+<td>17.5</td>
+<td>31.0</td>
+<td>7.0</td>
+<td><strong>21.5</strong></td>
+<td>2.5</td>
+<td>22.0</td>
+<td class="mean-cell">32.63</td></tr>
+<tr data-method="dual_path_fusion" data-order="6" data-name="Dual-Path Fusion" data-values="99.5,72.0,22.0,30.0,17.5,19.0,4.5,16.5" data-mean="35.13"><th scope="row">Dual-Path Fusion</th>
+<td><strong>99.5</strong></td>
+<td><strong>72.0</strong></td>
+<td><strong>22.0</strong></td>
+<td>30.0</td>
+<td><strong>17.5</strong></td>
+<td>19.0</td>
+<td>4.5</td>
+<td>16.5</td>
+<td class="mean-cell">35.13</td></tr>
+</tbody>
+<tbody data-group="additional_reference"><tr class="group-label"><th colspan="10" scope="rowgroup">Additional reference systems</th></tr>
+<tr data-method="pi0" data-order="7" data-name="π₀" data-values="61.5,39.0,3.5,27.0,7.0,5.0,7.5,36.0" data-mean="23.31"><th scope="row">π₀</th>
+<td>61.5</td>
+<td>39.0</td>
+<td>3.5</td>
+<td>27.0</td>
+<td>7.0</td>
+<td>5.0</td>
+<td>7.5</td>
+<td>36.0</td>
+<td class="mean-cell">23.31</td></tr>
+<tr data-method="forcevla" data-order="8" data-name="ForceVLA" data-values="35.5,45.5,12.5,14.0,10.0,12.0,20.0,26.0" data-mean="21.94"><th scope="row">ForceVLA</th>
+<td>35.5</td>
+<td>45.5</td>
+<td>12.5</td>
+<td>14.0</td>
+<td>10.0</td>
+<td>12.0</td>
+<td>20.0</td>
+<td>26.0</td>
+<td class="mean-cell">21.94</td></tr>
+<tr data-method="forceflow" data-order="9" data-name="ForceFlow" data-values="51.5,3.0,0.0,0.5,0.0,0.0,0.0,0.0" data-mean="6.88"><th scope="row">ForceFlow</th>
+<td>51.5</td>
+<td>3.0</td>
+<td>0.0</td>
+<td>0.5</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td class="mean-cell">6.88</td></tr>
+</tbody>
+</table></div>
+<div class="table-actions"><button type="button" class="reset-order" data-table="table-simulation" hidden>Reset paper order</button><span class="sort-status" aria-live="polite" data-status="table-simulation">Rows follow the manuscript order.</span></div>
+    <details class="protocol"><summary>Simulation evaluation protocol</summary>
+      <p>A separate policy is trained for every task. The seven π₀.₅ configurations share task demonstrations and are trained for 10,000 steps with a batch size of 32. Training instances use seeds 0–199; evaluation uses the same seeds 300–499 for every method.</p>
+      <p>Physics runs at 60 Hz and control at 15 Hz, with at most 1,500 control steps (100 simulated seconds). The π₀.₅ configurations, π₀, and ForceVLA predict and execute 50-step action chunks. ForceFlow predicts 64 steps and executes 32 before the next query. The control rate is not the policy-query rate.</p>
+      <p>Additional reference systems retain differences in training and execution settings. All ten systems use the same lower-bound-only angle criterion for Faucet Direction.</p>
+    </details>
+  </section>
+  <section id="real-world" class="study-section" aria-labelledby="real-world-heading">
+    <div class="section-heading"><div><p class="eyebrow">Table II · 800 evaluation trials</p><h2 id="real-world-heading">Real-world manipulation</h2></div><p class="sample-size">8 systems · 5 tasks<br><b>20 trials per task–method pair</b></p></div>
+    <p class="table-note">Bold marks the highest observed rate in each column, including ties. Prompt Fusion improves success over the no-force baseline on all five tasks. Both temporal designs improve Weight Sort but underperform the baseline on Block Insert.</p>
+    <div class="table-scroll" role="region" aria-label="Real World results table, scroll horizontally for all tasks" tabindex="0">
+<table id="table-real_world" class="paper-table">
+<caption>Table II. Task success rates (%). Mean weights every task equally.</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button" data-sort="name">Method <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="0">Weight Sort <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="1">Plate Retrieve <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="2">Stamp Press <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="3">Plug Insert <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="4">Block Insert <span aria-hidden="true">↕</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" data-sort="mean">Mean <span aria-hidden="true">↕</span></button></th></tr></thead>
+<tbody data-group="controlled_pi05"><tr class="group-label"><th colspan="7" scope="rowgroup">Shared-backbone comparison · π₀.₅</th></tr>
+<tr data-method="pi05_no_force" data-order="0" data-name="π₀.₅ (No Force)" data-values="30.0,20.0,40.0,60.0,50.0" data-mean="40.0"><th scope="row">π₀.₅ (No Force)</th>
+<td>30.0</td>
+<td>20.0</td>
+<td>40.0</td>
+<td>60.0</td>
+<td>50.0</td>
+<td class="mean-cell">40.00</td></tr>
+<tr data-method="token_fusion" data-order="1" data-name="Token Fusion" data-values="45.0,40.0,50.0,60.0,10.0" data-mean="41.0"><th scope="row">Token Fusion</th>
+<td>45.0</td>
+<td>40.0</td>
+<td>50.0</td>
+<td>60.0</td>
+<td>10.0</td>
+<td class="mean-cell">41.00</td></tr>
+<tr data-method="prompt_fusion" data-order="2" data-name="Prompt Fusion" data-values="70.0,40.0,65.0,80.0,60.0" data-mean="63.0"><th scope="row">Prompt Fusion</th>
+<td>70.0</td>
+<td>40.0</td>
+<td>65.0</td>
+<td>80.0</td>
+<td><strong>60.0</strong></td>
+<td class="mean-cell"><strong>63.00</strong></td></tr>
+<tr data-method="cross_attention" data-order="3" data-name="Cross-Attention" data-values="60.0,30.0,40.0,50.0,55.0" data-mean="47.0"><th scope="row">Cross-Attention</th>
+<td>60.0</td>
+<td>30.0</td>
+<td>40.0</td>
+<td>50.0</td>
+<td>55.0</td>
+<td class="mean-cell">47.00</td></tr>
+<tr data-method="token_fusion_pred" data-order="4" data-name="Token Fusion + Pred" data-values="45.0,60.0,60.0,45.0,35.0" data-mean="49.0"><th scope="row">Token Fusion + Pred</th>
+<td>45.0</td>
+<td><strong>60.0</strong></td>
+<td>60.0</td>
+<td>45.0</td>
+<td>35.0</td>
+<td class="mean-cell">49.00</td></tr>
+<tr data-method="temporal_prompt" data-order="5" data-name="Temporal Prompt" data-values="80.0,45.0,65.0,75.0,35.0" data-mean="60.0"><th scope="row">Temporal Prompt</th>
+<td>80.0</td>
+<td>45.0</td>
+<td>65.0</td>
+<td>75.0</td>
+<td>35.0</td>
+<td class="mean-cell">60.00</td></tr>
+<tr data-method="dual_path_fusion" data-order="6" data-name="Dual-Path Fusion" data-values="95.0,45.0,70.0,85.0,20.0" data-mean="63.0"><th scope="row">Dual-Path Fusion</th>
+<td><strong>95.0</strong></td>
+<td>45.0</td>
+<td><strong>70.0</strong></td>
+<td><strong>85.0</strong></td>
+<td>20.0</td>
+<td class="mean-cell"><strong>63.00</strong></td></tr>
+</tbody>
+<tbody data-group="additional_reference"><tr class="group-label"><th colspan="7" scope="rowgroup">Additional reference system</th></tr>
+<tr data-method="forcevla" data-order="7" data-name="ForceVLA" data-values="50.0,0.0,40.0,70.0,5.0" data-mean="33.0"><th scope="row">ForceVLA</th>
+<td>50.0</td>
+<td>0.0</td>
+<td>40.0</td>
+<td>70.0</td>
+<td>5.0</td>
+<td class="mean-cell">33.00</td></tr>
+</tbody>
+</table></div>
+<div class="table-actions"><button type="button" class="reset-order" data-table="table-real_world" hidden>Reset paper order</button><span class="sort-status" aria-live="polite" data-status="table-real_world">Rows follow the manuscript order.</span></div>
+    <details class="protocol"><summary>Real-world evaluation protocol</summary>
+      <p>Experiments use a Franka Research 3 with a six-axis wrist force/torque sensor. Each system uses 200 demonstrations per task and is trained for 10,000 steps with a batch size of 64. All systems are evaluated on the same 20 initial conditions per task.</p>
+    </details>
+  </section>
+  <section class="reading-notes" aria-labelledby="reading-heading">
+    <h2 id="reading-heading">Reading the results</h2>
     <div class="grid cols-2">
-      <div class="card">
-        <h3 style="margin-top:0">看区间，不要只看点</h3>
-        <p class="small">n = 100 时，一个 25% 的成功率对应的 95% 置信区间大约是 16.9%–34.7%，
-        宽度接近 18 个百分点。也就是说，两个相差几个百分点的数字，区间几乎完全重叠，
-        <b>不足以说明谁更好</b>。请把每个数字都读成一段区间。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">空格 ≠ 0 分</h3>
-        <p class="small">标着「<span aria-hidden="true">○</span> 尚未评测」的格子是<b>从来没跑过</b>；
-        标着「<span aria-hidden="true">⚠</span> 结果无效」的格子是<b>跑了但结果不可信</b>
-        （例如所有模型在同一任务上同时全 0，更像评测链路故障而不是策略能力）。
-        这两种都和「跑出来是低分」完全不同，请不要把它们当作 0% 来比较或求平均。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">先看覆盖率，再看分数</h3>
-        <p class="small">上方的覆盖率面板给出全部格子里实际完成了几格。
-        在覆盖率补齐之前，任何跨任务的汇总（平均成功率、总排名）都会被缺格严重扭曲，
-        因此本站<b>不提供</b>跨任务平均分或总排名。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">并排的百分数最容易骗人</h3>
-        <p class="small">看到两个相差十几个百分点的成功率并排放着，很难不立刻下结论。
-        但这个差距是否超出随机波动，要看<b>同一行的 p 值</b>：
-        本站对每个任务都做了 Fisher 精确检验（双侧），结果直接放在表格最右一列，
-        并在下方给出完整的逐任务对比表。<b>请把 p 值和百分数一起读。</b></p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">还要考虑多重比较</h3>
-        <p class="small">同时比较多个任务时，只要任务数够多，总会有几个「碰巧」达到 p &lt; 0.05。
-        因此本站同时标注 Bonferroni 校正后是否仍然显著。
-        <b>校正后仍显著的对比数量非常少</b>，而达到显著的那几组方向还不一致 ——
-        这正是本站不给出「力有帮助」或「力没用」任何一方总体结论的原因。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">换个角度看同一批数字</h3>
-        <p class="small">表格上方可以切换<b>任务范围</b>（全部 / 只看力分类 / 只看接触密集）和
-        <b>排序方式</b>（类别分组 / 名称 / 已完成模型数 / 按某个模型的成功率）。
-        这些只改变显示顺序和范围，<b>不改变任何数字</b>，也不会把缺格变成 0：
-        按成功率排序时，没跑过的任务一律沉到最后，而不是被当成 0% 排在最底部参与比较。
-        当前视角会写进地址栏，可以直接把链接发给别人。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">空列是预留位，不是零分</h3>
-        <p class="small">有些模型列整列都标着「尚未评测」—— 这些模型在评测计划里，
-        但还没跑。列保留在表中是为了让缺口<b>可见</b>，
-        而不是把没做的事从表里悄悄删掉。请不要把这些空列理解成该模型表现为 0。</p>
-      </div>
+      <article class="card"><h3>Observed performance</h3><p>These are the point estimates reported in the submitted manuscript. A small difference in mean success, such as 35.31% versus 35.13%, does not by itself establish statistical superiority. The tables do not report confidence intervals or variation across training seeds.</p></article>
+      <article class="card"><h3>Complete-task success</h3><p>Reaching a target object state does not always complete a task: release, withdrawal, and other task-specific requirements can still fail. The manuscript pairs success rates with outcome and trajectory diagnostics.</p></article>
     </div>
-
-    <h2>数据从哪来</h2>
-    <p class="muted">本页所有数字都是运行时从仓库内的
-    <code>results/leaderboard.json</code> 读取的，页面本身不含任何硬编码成绩。
-    该文件的字段格式遵循 <code>forcebench-results-v1</code> 契约，
-    置信区间在生成数据时用 Clopper-Pearson 精确二项方法算好后写入文件，前端只负责展示。</p>
-    <p class="small muted">要修改榜单上的数字，改的是 <code>results/leaderboard.json</code>，不是这个页面。</p>
-
-  </div>
-</main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <div>
-      <p><b>ForceBench</b> v0.1 原型 · 代码采用 MIT 许可</p>
-      <p>榜单数字为原型阶段结果，随时可能变动，请勿引用。</p>
-    </div>
-    <div>
-      <p><a href="https://github.com/forcebench-platform/ForceBench">github.com/forcebench-platform/ForceBench</a></p>
-      <p class="small">本站为纯静态页面，数据实时读取自仓库内的 <code>results/leaderboard.json</code>。</p>
-    </div>
-  </div>
-</footer>
-
-<script src="./assets/data.js"></script>
-<script src="./assets/render.js"></script>
+    <p class="source-note">Source: Tables I and II of the manuscript submitted on September 15, 2026. Status: submitted to ICRA 2027; acceptance has not been announced. These are manuscript results, not entries from an open community leaderboard. Values are also available in the <a href="./results/leaderboard.json">structured results file</a>.</p>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="wrap"><p><b>ForceBench</b> · Benchmarking Force Integration for Robotic Manipulation</p><p><a href="./index.html">Project home</a> · <a href="./about.html">About &amp; citation</a></p></div></footer>
+<script src="./assets/paper-results.js" defer></script>
 </body>
 </html>

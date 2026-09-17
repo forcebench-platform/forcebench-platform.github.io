@@ -1,0 +1,81 @@
+/* Paper results retain ForceBench's green / purple academic palette. */
+body[data-page="paper-results"] {
+  --accent: #0b7a5c;
+  --accent-ink: #086349;
+  --accent-soft: #eaf5ef;
+  --bg: #fff;
+  --surface: #fff;
+  --surface-2: #f5f7f6;
+  --text: #1c1e21;
+  --text-muted: #5f6368;
+  --border: #e3e5e8;
+  --border-strong: #ccd5ce;
+  --paper-purple: #5b4b8a;
+  background: #fff;
+}
+.brand-force { color: var(--accent); }
+.brand-bench { color: var(--paper-purple); }
+.results-intro { padding: 44px 0 16px; }
+.results-intro h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; letter-spacing: -.025em; margin: 10px 0 20px; }
+.results-intro .lede { max-width: 890px; font-size: 1.08rem; line-height: 1.75; }
+.eyebrow { color: var(--accent); text-transform: uppercase; font-weight: 700; letter-spacing: .09em; font-size: .74rem; margin: 0 0 8px; }
+.section-links { display: flex; flex-wrap: wrap; gap: 12px 25px; margin: 24px 0 30px; font-size: .91rem; font-weight: 600; }
+.result-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.result-highlights article { padding: 23px 25px; background: #f7f9f7; }
+.result-highlights article + article { border-left: 1px solid var(--border); }
+.result-highlights article:nth-child(2) { background: #f6f4fa; }
+.result-highlights .metric { font-family: Georgia, "Times New Roman", serif; font-size: 2.65rem; line-height: 1.25; font-weight: 600; color: var(--accent); }
+.result-highlights article:nth-child(2) .metric { color: var(--paper-purple); }
+.result-highlights .metric span { font-family: var(--font); font-size: .95rem; font-weight: 500; }
+.result-highlights h2 { font-size: .95rem; margin: 10px 0 6px; }
+.result-highlights p { color: var(--text-muted); font-size: .87rem; line-height: 1.6; margin: 0; }
+.study-section { margin: 40px 0 56px; scroll-margin-top: 100px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
+.section-heading h2, .reading-notes > h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.9rem; margin: 0; line-height: 1.3; }
+.sample-size { margin: 0; text-align: right; color: var(--text-muted); font-size: .83rem; }
+.sample-size b { font-weight: 600; color: var(--text); }
+.table-note { font-size: .9rem; color: var(--text-muted); line-height: 1.7; margin: 0 0 16px; }
+.table-scroll { overflow: auto; max-width: 100%; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+.paper-table { border-collapse: collapse; width: 100%; min-width: 960px; font-size: .81rem; font-variant-numeric: tabular-nums; margin: 0; background: #fff; }
+#table-real_world { min-width: 730px; }
+.paper-table caption { text-align: left; background: #f7f9f7; padding: 11px 15px; font-size: .79rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.paper-table th, .paper-table td { padding: 10px 9px; border: 0; border-bottom: 1px solid #e9ece9; text-align: right; white-space: nowrap; }
+.paper-table thead th { color: var(--text); background: #fff; white-space: normal; vertical-align: bottom; padding: 0; }
+.paper-table th:first-child { text-align: left; }
+.paper-table thead th:first-child, .paper-table tbody th[scope="row"] { position: sticky; left: 0; z-index: 2; min-width: 186px; background: #fff; box-shadow: 1px 0 0 var(--border); }
+.paper-table th[scope="row"] { font-weight: 500; }
+.paper-table .group-label th { position: static; background: #f2f5f2; color: var(--accent-ink); text-align: left; font-size: .73rem; font-weight: 600; padding: 7px 12px; box-shadow: none; }
+.paper-table tbody[data-group="additional_reference"] .group-label th { background: #f4f1f8; color: var(--paper-purple); }
+.paper-table tbody tr[data-method]:hover td, .paper-table tbody tr[data-method]:hover th { background: #f6faf7; }
+.paper-table strong { color: var(--accent-ink); font-weight: 750; }
+.paper-table .mean-cell { background: #f5f9f6; border-left: 1px solid var(--border); }
+.paper-table thead button { appearance: none; border: 0; padding: 14px 9px; width: 100%; min-height: 65px; background: none; color: inherit; font: inherit; line-height: 1.4; font-weight: 600; cursor: pointer; text-align: right; }
+.paper-table thead th:first-child button { text-align: left; }
+.paper-table thead button:hover { background: var(--accent-soft); }
+.paper-table thead button span { color: var(--accent); font-weight: 700; }
+.table-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 10px; min-height: 28px; font-size: .76rem; color: var(--text-muted); }
+.reset-order { border: 1px solid var(--border-strong); color: var(--accent-ink); background: #fff; border-radius: 5px; font: inherit; padding: 4px 10px; cursor: pointer; }
+.reset-order[hidden] { display: none; }
+.protocol { border-top: 1px solid var(--border); margin-top: 15px; padding-top: 12px; color: var(--text-muted); font-size: .88rem; }
+.protocol summary { cursor: pointer; color: var(--text); font-weight: 600; }
+.protocol p { margin: 12px 0; }
+.reading-notes { margin: 45px 0 55px; }
+.reading-notes .grid { margin-top: 22px; }
+.reading-notes .card { box-shadow: none; background: #fafbf9; }
+.reading-notes h3 { font-size: 1rem; margin: 0 0 8px; }
+.reading-notes .card p { font-size: .89rem; color: var(--text-muted); margin: 0; }
+.source-note { margin-top: 22px; font-size: .83rem; color: var(--text-muted); }
+body[data-page="paper-results"] .site-footer { font-size: .81rem; }
+@media (max-width: 740px) {
+  .results-intro { padding-top: 28px; }
+  .result-highlights { grid-template-columns: 1fr; }
+  .result-highlights article { padding: 18px 20px; }
+  .result-highlights article + article { border-left: 0; border-top: 1px solid var(--border); }
+  .result-highlights .metric { font-size: 2.2rem; }
+  .section-heading { align-items: start; flex-direction: column; gap: 12px; }
+  .sample-size { text-align: left; }
+  .site-header .wrap { gap: 6px; }
+  .site-nav { margin-left: 0; width: 100%; }
+  .site-nav a { font-size: .8rem; padding: 5px 8px; }
+  .paper-table thead th:first-child, .paper-table tbody th[scope="row"] { min-width: 168px; max-width: 168px; white-space: normal; }
+}

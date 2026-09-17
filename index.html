@@ -1,213 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ForceBench: A Force-Aware Contact-Rich Manipulation Benchmark</title>
-<style>
-  :root{
-    --ink:#1c1e21; --muted:#5f6368; --accent:#0b7a5c; --accent2:#5b4b8a;
-    --card:#f6f7f9; --line:#e3e5e8; --warn:#9a6700;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:#fff;line-height:1.65}
-  .sans{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
-  header{padding:64px 0 8px;text-align:center}
-  h1{font-size:2.35rem;font-weight:600;line-height:1.3}
-  h1 .fb1{color:var(--accent)} h1 .fb2{color:var(--accent2)}
-  .subtitle{font-size:1.45rem;font-weight:500;margin-top:6px}
-  .authors{margin-top:26px;font-size:1.05rem;color:var(--ink)}
-  .affil{margin-top:10px;font-size:.95rem;color:var(--muted)}
-  .logorow{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;align-items:center;margin-top:26px}
-  .logorow img{height:72px;width:auto}
-  .btnrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:30px 0 8px}
-  .btn{display:inline-block;padding:9px 22px;border-radius:22px;background:#eff1f4;border:1px solid var(--line);
-       color:var(--ink);text-decoration:none;font-size:.95rem}
-  .btn:hover{background:#e4e7ec}
-  .btn.dis{color:#a4a8ae;pointer-events:none}
-  .btn b{font-weight:600}
-  section{margin:44px 0}
-  h2{font-size:1.6rem;text-align:center;margin-bottom:18px}
-  h3{font-size:1.15rem;margin:20px 0 8px}
-  p.lead{font-size:1.02rem;text-align:justify}
-  .note{background:#fff8e6;border:1px solid #f0dfa8;border-radius:8px;padding:12px 16px;font-size:.92rem;margin:16px 0}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
-  .card h4{font-size:1.02rem;margin-bottom:6px}
-  .card .tag{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:10px;margin-bottom:8px;color:#fff}
-  .tag.force{background:var(--accent)} .tag.contact{background:var(--accent2)}
-  .card p{font-size:.88rem;color:var(--muted)}
-  .card code{font-family:Consolas,Menlo,monospace;font-size:.82rem;color:var(--ink)}
-  .statrow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:18px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 22px;text-align:center;min-width:130px}
-  .stat .n{font-size:1.5rem;font-weight:600;color:var(--accent)}
-  .stat .l{font-size:.8rem;color:var(--muted)}
-  .tablewrap{overflow-x:auto;margin-top:12px}
-  table{border-collapse:collapse;width:100%;font-size:.9rem}
-  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
-  th{background:var(--card)}
-  pre{background:#14171a;color:#e8eaed;border-radius:10px;padding:16px 18px;overflow-x:auto;
-      font-family:Consolas,Menlo,monospace;font-size:.85rem;line-height:1.55;margin-top:12px}
-  .news li{margin:6px 0;font-size:.95rem}
-  footer{border-top:1px solid var(--line);margin-top:56px;padding:26px 0 40px;text-align:center;color:var(--muted);font-size:.85rem}
-  a{color:var(--accent)}
-</style>
+<title>ForceBench: Benchmarking Force Integration for Robotic Manipulation</title>
+<meta name="description" content="ForceBench evaluates six-axis wrist-force integration in vision-language-action policies: eight simulation tasks, 1,600 demonstrations, and a five-task real-world study. Submitted to ICRA 2027.">
+<meta property="og:title" content="ForceBench: Benchmarking Force Integration for Robotic Manipulation">
+<meta property="og:description" content="Eight simulation tasks. Six force integration designs. A unified evaluation protocol. Submitted to ICRA 2027.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://forcebench-platform.github.io/">
+<meta property="og:image" content="https://forcebench-platform.github.io/assets/figures/pipeline.webp">
+<link rel="canonical" href="https://forcebench-platform.github.io/">
+<link rel="stylesheet" href="assets/project.css">
 </head>
 <body>
-<header class="wrap">
-  <h1><span class="fb1">Force</span><span class="fb2">Bench</span>: A Contact-Rich Manipulation Benchmark<br>
-      That Actually Tests Force Perception</h1>
-  <div class="authors">
-    Xuan&nbsp;Han<sup>1*</sup>,&ensp;Zinuo&nbsp;Jin<sup>1*</sup>,&ensp;Tianlin&nbsp;Li<sup>1*</sup>,&ensp;
-    Xin&nbsp;Liu<sup>1</sup>,&ensp;Yuchen&nbsp;Xue<sup>1</sup>,&ensp;Shuhan&nbsp;Zhan<sup>1</sup>,&ensp;
-    Yunfan&nbsp;Lou<sup>3,1</sup>,&ensp;Boxian&nbsp;Yao<sup>1</sup>,<br>
-    Ruihai&nbsp;Wu<sup>2&#9993;</sup>,&ensp;Zhibo&nbsp;Pang<sup>1,4&#9993;</sup>
-  </div>
-  <div class="affil"><sup>1</sup>PKU-PI&nbsp;Lab,&nbsp;Peking&nbsp;University&emsp;<sup>2</sup>University&nbsp;of&nbsp;California,&nbsp;Berkeley<br>
-    <sup>3</sup>National&nbsp;University&nbsp;of&nbsp;Singapore&emsp;<sup>4</sup>ePyBot&nbsp;Intelligence</div>
-  <div class="affil"><sup>*</sup>Equal contribution&emsp;<sup>&#9993;</sup>Corresponding authors</div>
-  <div class="affil">Built on Isaac&nbsp;Sim&nbsp;6.0.1 / Isaac&nbsp;Lab&nbsp;6.1.14 &middot; Franka&nbsp;FR3</div>
-  <div class="logorow">
-    <img src="assets/logos/pi-lab.png" alt="PKU-PI Lab">
-    <img src="assets/logos/pku.png" alt="Peking University">
-    <img src="assets/logos/berkeley.png" alt="University of California, Berkeley">
-  </div>
-
-  <div class="btnrow sans">
-    <a class="btn dis" title="not yet on arXiv">&#128196; arXiv (soon)</a>
-    <a class="btn dis" title="paper in preparation">&#128462; PDF (soon)</a>
-    <a class="btn" href="https://github.com/forcebench-platform/ForceBench"><b>&#128736; Code</b></a>
-    <a class="btn" href="doc/index.html"><b>&#128214; Document</b></a>
-    <a class="btn" href="leaderboard.html">&#127942; Leaderboard</a>
-    <a class="btn" href="#citation">&#128172; Citation</a>
-  </div>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="topnav" aria-label="Main navigation"><div class="wrap nav-inner"><a class="brand" href="./">Force<span>Bench</span></a><div class="nav-links"><a href="#overview">Overview</a><a href="tasks.html">Tasks</a><a href="#methods">Methods</a><a href="leaderboard.html">Results</a><a href="doc/index.html">Protocol</a><a href="#resources">Resources</a></div></div></nav>
+<main id="main">
+<header class="hero wrap">
+  <p class="venue">Submitted to ICRA 2027</p>
+  <h1><span class="wordmark">Force<span>Bench</span></span>Benchmarking Force Integration<br class="desktop-break"> for Robotic Manipulation</h1>
+  <p class="authors">Xuan Han<sup>1*</sup>, Zinuo Jin<sup>1*</sup>, Tianlin Li<sup>1*</sup>, Yunfan Lou<sup>3,1</sup>, Xin Liu<sup>1</sup>,<br class="desktop-break"> Yuchen Xue<sup>1</sup>, Yuanpeng He<sup>1</sup>, Boxian Yao<sup>1</sup>, Shuhan Zhan<sup>1</sup>, Ruihai Wu<sup>2</sup>, Zhibo Pang<sup>1,4</sup></p>
+  <p class="affiliations"><span><sup>1</sup> PKU-PI Lab, Peking University</span><span><sup>2</sup> University of California, Berkeley</span><span><sup>3</sup> National University of Singapore</span><span><sup>4</sup> ePyBot Intelligence</span></p>
+  <p class="equal">* Equal contribution</p>
+  <div class="logos"><img src="assets/logos/pku.png" alt="Peking University"><img src="assets/logos/pi-lab.png" alt="PKU-PI Lab"><img src="assets/logos/berkeley.png" alt="University of California, Berkeley"></div>
+  <div class="actions"><a class="button primary" href="leaderboard.html">Explore the results <span aria-hidden="true">↗</span></a><a class="button" href="doc/index.html">Evaluation protocol</a><a class="button" href="#citation">Citation</a></div>
+  <p class="small"><a href="#resources">Paper, code, and data availability</a></p>
 </header>
 
-<section class="wrap">
-  <h2>Abstract</h2>
-  <p class="lead">
-    Many manipulation benchmarks describe themselves as force-sensitive, yet their success
-    criteria can be satisfied by vision alone. ForceBench is a simulation benchmark of
-    <b>eight contact-rich tasks</b> on a Franka FR3 in Isaac&nbsp;Lab, designed around one
-    question: <i>does force feedback actually change what a policy can do?</i>
-    In <b>five force-classification tasks</b>, the property that determines correct behaviour
-    &mdash; payload mass, an off-centre load, a detent that has or has not clicked past, rising
-    drawer resistance &mdash; is <b>visually unobservable</b>: the interaction wrench is the only
-    channel that carries it. <b>Three contact-dense tasks</b> (gear meshing, nut threading, peg
-    insertion) complete the suite. Every task shares a single frozen simulator contract
-    (60&nbsp;Hz physics, 15&nbsp;Hz control, one canonical <code class="sans">smooth_position</code>
-    arm controller), ships with 200 expert episodes collected under that contract, and is
-    evaluated on a disjoint, class-balanced seed range with a fixed protocol &mdash; so numbers
-    from different labs are comparable by construction.
-  </p>
-  <div class="statrow sans">
-    <div class="stat"><div class="n">8</div><div class="l">tasks</div></div>
-    <div class="stat"><div class="n">5&nbsp;+&nbsp;3</div><div class="l">force-classification + contact-dense</div></div>
-    <div class="stat"><div class="n">200</div><div class="l">expert episodes / task</div></div>
-    <div class="stat"><div class="n">100</div><div class="l">eval rollouts / task</div></div>
-    <div class="stat"><div class="n">1</div><div class="l">frozen sim contract</div></div>
-  </div>
+<section id="overview" class="section wrap">
+  <p class="eyebrow">One benchmark · Three manipulation demands</p>
+  <h2>How should a policy use force?</h2>
+  <p class="intro">Force feedback can inform both physical decisions and their execution. ForceBench compares how vision-language-action policies integrate wrist force and torque under a shared observation, demonstration, and evaluation protocol.</p>
+  <div class="stats"><div><strong>8</strong><span>simulation tasks</span></div><div><strong>1,600</strong><span>synchronized demonstrations</span></div><div><strong>16,000</strong><span>simulation evaluation episodes</span></div><div><strong>800</strong><span>real-world evaluation trials</span></div></div>
+  <figure><a href="assets/figures/pipeline.webp" target="_blank" rel="noopener"><img src="assets/figures/pipeline.webp" width="2200" height="1546" alt="ForceBench pipeline: robot assets and physical mechanisms generate eight tasks, synchronized demonstrations, and parallel seeded policy evaluations."></a><figcaption>A common pipeline connects robot assets and physical mechanisms, task generation, synchronized demonstrations, and parallel seeded policy evaluation. Select any figure to view it at full resolution.</figcaption></figure>
+  <div class="abstract"><h3>Abstract</h3><p>Force feedback provides vision-language-action (VLA) policies with physical observations that can guide action selection and execution. However, differences in tasks, demonstrations, and control settings across existing systems hinder reliable comparisons of force integration designs. We introduce ForceBench, a simulation benchmark for evaluating six-axis wrist-force integration under a unified protocol. ForceBench combines eight tasks spanning physical-property inference, resistance-dependent interaction, and contact-rich assembly with 1,600 synchronized demonstrations and task-specific success criteria. We compare a no-force baseline and six force integration designs on a shared π₀.₅ backbone. Prompt Fusion achieves the highest observed mean simulation success of 35.31%, compared with 23.25% for the baseline, and improves success across all three task categories. Predictive and temporal gains in simulation concentrate on physical-property inference, while both temporal designs underperform the baseline on assembly. Real-world evaluation of eight systems across five tasks supports the main qualitative trends: Prompt Fusion and Dual-Path Fusion achieve 63.00% mean success, compared with 40.00% for the baseline, but only Prompt Fusion improves every task. These findings support ForceBench’s practical value for identifying the benefits and limitations of force integration across manipulation demands.</p></div>
 </section>
 
-<section class="wrap">
-  <h2>The Eight Tasks</h2>
-  <p class="lead">The five <span style="color:var(--accent);font-weight:600">force-classification</span>
-  tasks are the evidentiary core of the benchmark: in each, a policy without force sensing is reduced
-  to guessing. The three <span style="color:var(--accent2);font-weight:600">contact-dense</span> tasks
-  stress precise interaction but are currently judged on final pose only.</p>
-  <div class="grid sans">
-    <div class="card"><span class="tag force">force-classification</span>
-      <h4>weight_sort</h4>
-      <p>Sort visually identical boxes by payload mass (<code>0.06</code> vs <code>0.18&nbsp;kg</code>). Appearance carries zero information.</p></div>
-    <div class="card"><span class="tag force">force-classification</span>
-      <h4>rattle_sort</h4>
-      <p>Sort parcels by whether the internal load is off-centre. Total mass is constant; the tell is a <code>&asymp;0.035&nbsp;N&middot;m</code> torque signature.</p></div>
-    <div class="card"><span class="tag force">force-classification</span>
-      <h4>stove_turn_on</h4>
-      <p>Rotate a stove knob past its ignition detent (peak <code>0.12&nbsp;N&middot;m</code>). Whether the detent has clicked is felt, not seen.</p></div>
-    <div class="card"><span class="tag force">force-classification</span>
-      <h4>faucet_turn</h4>
-      <p>Turn a faucet handle past a detent with a fixed <code>0.20&nbsp;N&middot;m</code> peak resistance.</p></div>
-    <div class="card"><span class="tag force">force-classification</span>
-      <h4>radmanso_drawer_sort_table</h4>
-      <p>Pull a drawer open and stop where resistance rises; the initial resistance is randomized in <code>5.5&ndash;9.0&nbsp;N</code>.</p></div>
-    <div class="card"><span class="tag contact">contact-dense</span>
-      <h4>gear_mesh</h4>
-      <p>Mesh a gear onto a fixed base (NVIDIA FORGE assets). Success judged on final alignment.</p></div>
-    <div class="card"><span class="tag contact">contact-dense</span>
-      <h4>nut_thread</h4>
-      <p>Thread an M16 nut onto its bolt. Millimetre-scale tolerance under sustained contact.</p></div>
-    <div class="card"><span class="tag contact">contact-dense</span>
-      <h4>peg_insert</h4>
-      <p>Insert an 8&nbsp;mm peg into its hole, release, and retreat cleanly.</p></div>
-  </div>
-  <div class="note sans"><b>Honesty note.</b> The three contact-dense tasks are described as force-sensitive
-  in their manifests, but their current success predicates check final pose only &mdash; they neither prove
-  nor disprove that force helps. Force-dependent success checks for them are a v1.0 work item.
-  ForceBench documents this instead of hiding it.</div>
+<section id="tasks" class="section band"><div class="wrap">
+  <p class="eyebrow">The task suite</p><h2>Three ways that physical interaction matters.</h2>
+  <div class="cards"><article><span class="tag">2 tasks</span><h3>Physical-property inference</h3><p>Infer mass or center of mass through interaction, then choose the correct destination.</p><p class="task-list">Weight Sort · CoM Sort</p></article><article><span class="tag purple">5 tasks</span><h3>Resistance-dependent interaction</h3><p>Adapt direction, engagement, or stopping to the resistance encountered during motion.</p><p class="task-list">Faucet Turn · Faucet Direction · Stove Turn · Stove Press · Drawer Pull</p></article><article><span class="tag">1 task</span><h3>Contact-rich assembly</h3><p>Align a nut with a bolt, engage the threads, and rotate to a target threaded height.</p><p class="task-list">Nut Thread</p></article></div>
+  <figure><a href="assets/figures/simulation-tasks.webp" target="_blank" rel="noopener"><img loading="lazy" src="assets/figures/simulation-tasks.webp" width="2200" height="1656" alt="Simulation environments and physical variations for parcel sorting, faucets, stove knobs, drawer pulling, and nut threading."></a><figcaption>The eight tasks share six environment types. Physical conditions can also affect visible motion and proprioception; the benchmark measures the additional benefit of force observations.</figcaption></figure>
+  <a class="text-link" href="tasks.html">Explore all eight tasks and their success criteria <span aria-hidden="true">→</span></a>
+</div></section>
+
+<section id="methods" class="section wrap">
+  <p class="eyebrow">A shared π₀.₅ backbone</p><h2>Six designs for integrating wrist force.</h2>
+  <p class="intro">A no-force baseline and six force integration configurations share the backbone and simulation protocol. Each design is evaluated separately.</p>
+  <figure><a href="assets/figures/force-integration.webp" target="_blank" rel="noopener"><img loading="lazy" src="assets/figures/force-integration.webp" width="2200" height="1157" alt="Architecture showing the alternative force pathways: cross-attention, token fusion and prediction, prompt fusion, temporal prompt, and dual-path fusion."></a><figcaption>Alternative integration pathways, not a single combined model. The future-force prediction head is used only during training.</figcaption></figure>
+  <div class="cards methods"><article><span class="tag">Current observation</span><h3>Where does force enter?</h3><ul><li><strong>Token Fusion:</strong> encode the current six-axis wrench as six continuous action-side tokens.</li><li><strong>Prompt Fusion:</strong> normalize and discretize force alongside robot state as numerical prompt tokens.</li><li><strong>Cross-Attention:</strong> condition action-expert output on force before action projection.</li></ul></article><article><span class="tag purple">Predictive supervision</span><h3>What can prediction teach?</h3><p><strong>Token Fusion + Pred</strong> retains the Token Fusion input and adds a ten-step future-force prediction loss during training.</p><p>The auxiliary head is unused at deployment; it does not supply predicted forces to the controller.</p></article><article><span class="tag">Temporal information</span><h3>How is recent force summarized?</h3><p><strong>Temporal Prompt</strong> adds the current sample and per-axis mean and standard deviation from a 16-sample window to the prompt.</p><p><strong>Dual-Path Fusion</strong> adds four action-side tokens from masked temporal statistics alongside that prompt pathway.</p></article></div>
+  <p class="fineprint">The designs vary representation, normalization, model capacity, and integration location together. Their comparison does not isolate temporal history as a single controlled factor.</p>
 </section>
 
-<section class="wrap">
-  <h2>One Frozen Contract</h2>
-  <div class="tablewrap sans">
-  <table>
-    <tr><th>Physics / control</th><td>60&nbsp;Hz physics, 64 solver position iterations, 15&nbsp;Hz policy rate (<code>decimation=4</code>)</td></tr>
-    <tr><th>Arm controller</th><td>One canonical <code>smooth_position</code> controller (bounded TCP commands &rarr; DLS-IK &rarr; quintic joint trajectories). No TSI, no controller selection interface.</td></tr>
-    <tr><th>Observation</th><td>7-D TCP state + gripper, continuous RPY, two camera views, raw 6-D interaction wrench</td></tr>
-    <tr><th>Expert data</th><td>200 episodes per task, seeds <code>0&ndash;199</code>, 32 cloned environments per Isaac process</td></tr>
-    <tr><th>Evaluation</th><td>Seeds <code>200&ndash;299</code> (disjoint, class-balanced), 100 rollouts, env spacing <b>6&nbsp;m</b> (prevents visual crosstalk), 50-frame action chunks</td></tr>
-    <tr><th>Export</th><td>HDF5 episodes + LeRobot conversion for VLA training (&pi;0.5, ForceVLA, ForceFlow baselines)</td></tr>
-  </table>
-  </div>
-  <p class="lead" style="margin-top:12px">The runtime rejects any deviation from these values, and the
-  contract version is recorded with the data &mdash; results collected under a different contract are
-  mechanically distinguishable, not silently mixed.</p>
+<section id="results" class="section band"><div class="wrap">
+  <p class="eyebrow">Results from the submitted manuscript</p><h2>Force helps through the right interface.</h2>
+  <div class="result-grid"><article class="result-card"><p class="result-label">Simulation · 8 tasks</p><h3>Prompt Fusion</h3><div class="result-number">35.31<span>%</span></div><p class="comparison">vs. 23.25% for π₀.₅ without force</p><p class="gain">+12.06 percentage points</p><p>Highest observed mean in the reported simulation table. Dual-Path Fusion is close at 35.13%.</p></article><article class="result-card"><p class="result-label">Real world · 5 tasks</p><h3>Prompt Fusion &amp; Dual-Path Fusion</h3><div class="result-number">63.00<span>%</span></div><p class="comparison">vs. 40.00% for π₀.₅ without force</p><p class="gain">+23.00 percentage points</p><p>The two designs tie on mean success. Only Prompt Fusion improves every task over the baseline.</p></article></div>
+  <div class="findings"><article><h3>Integration matters</h3><p>Force observations alone do not guarantee an improvement. Representation and the interface to the policy affect the outcome.</p></article><article><h3>Temporal gains have limits</h3><p>Both temporal designs help physical-property inference in simulation but underperform the no-force baseline on Nut Thread.</p></article><article><h3>Completion matters</h3><p>Reaching the right physical state can still fall short of success when release, withdrawal, or stability conditions are unmet.</p></article></div>
+  <p class="fineprint">Simulation: 200 episodes per task–system pair. Real world: 20 trials per task–system pair. Means weight tasks equally. These are observed success rates; small differences are not claims of statistical significance.</p>
+  <a class="button primary" href="leaderboard.html">View both complete results tables <span aria-hidden="true">→</span></a>
+  <details class="diagnostics"><summary>From physical decisions to complete task success</summary><figure><a href="assets/figures/task-diagnostics.webp" target="_blank" rel="noopener"><img loading="lazy" src="assets/figures/task-diagnostics.webp" width="2200" height="1362" alt="Task diagnostics compare physical decision conditions and full task success, including drawer opening, valve angles, and nut assembly states."></a><figcaption>Task-level diagnostics distinguish intermediate physical conditions from complete success. For Drawer Pull, Prompt and Dual-Path Fusion each satisfy the reported intermediate condition in 81 of 200 episodes, but finish successfully in 46 and 9 episodes, respectively.</figcaption></figure></details>
+</div></section>
+
+<section id="real-world" class="section wrap">
+  <p class="eyebrow">Beyond simulation</p><h2>Five real-world tasks. Eight systems.</h2>
+  <p class="intro">A separate real-world study uses 200 demonstrations per task and 20 evaluation trials per task–system pair. It supports the main qualitative trends while testing different physical demands.</p>
+  <figure><a href="assets/figures/real-world-tasks.webp" target="_blank" rel="noopener"><img loading="lazy" src="assets/figures/real-world-tasks.webp" width="1799" height="473" alt="Five real-world tasks: Weight Sort, Plate Retrieve, Stamp Press, Plug Insert, and Block Insert."></a><figcaption>Weight Sort tests physical-property inference; Plate Retrieve, Stamp Press, and Plug Insert test resistance-dependent interaction; Block Insert tests assembly.</figcaption></figure>
+  <div class="setup-grid"><figure><a href="assets/figures/real-world-setup.webp" target="_blank" rel="noopener"><img loading="lazy" src="assets/figures/real-world-setup.webp" width="1800" height="931" alt="Real-world setup with a Franka Research 3 arm, wrist force-torque sensor, Robotiq gripper, and external and wrist cameras."></a></figure><div><h3>A synchronized physical setup</h3><p>A Franka Research 3 arm carries a KWR75B six-axis force/torque sensor and a Robotiq gripper. External and wrist cameras provide visual observations.</p><p>Real-world policies are trained for 10,000 steps with batch size 64 and evaluated on the same 20 initial conditions for each task.</p><p class="fineprint">This is a separately trained real-world evaluation, not a claim of direct simulation-to-real transfer.</p></div></div>
 </section>
 
-<section class="wrap">
-  <h2>Getting Started</h2>
-  <pre>git clone https://github.com/forcebench-platform/ForceBench
-cd ForceBench
-pip install -r requirements-dev.txt
-python -m pytest tests/          # contract tests, no Isaac Sim needed
+<section id="protocol" class="section band"><div class="wrap">
+  <p class="eyebrow">A common simulation protocol</p><h2>Compare designs under shared conditions.</h2>
+  <div class="protocol-grid"><article><h3>Demonstrations and seeds</h3><p>200 successful demonstrations per task. Training-instance seeds 0–199; evaluation-instance seeds 300–499. Privileged expert state is excluded from policy observations.</p></article><article><h3>Observation interface</h3><p>Two 224 × 224 RGB views, language, a seven-dimensional robot state, and a six-axis wrist wrench for force-enabled configurations.</p></article><article><h3>Control and episode budget</h3><p>60 Hz physics; 15 Hz control and recording. Episodes allow up to 1,500 control steps, corresponding to 100 seconds of simulated time.</p></article><article><h3>Action chunks</h3><p>The π₀.₅ configurations, π₀, and ForceVLA predict and execute 50 steps per query, unless an episode ends earlier. ForceFlow predicts 64 and executes 32.</p></article></div>
+  <p class="fineprint">Policies are trained separately for each task. π₀, ForceVLA, and ForceFlow are additional reference models, with differences in backbone, training, or action horizon described in the protocol.</p>
+  <a class="text-link" href="doc/index.html">Read the full training and evaluation protocol <span aria-hidden="true">→</span></a>
+</div></section>
 
-# with an Isaac Lab 2.3.2 environment + assets in place:
-./run_native.sh expert --task weight_sort --seeds 0-199   # generate data
-./scripts/evaluation/evaluate_vectorized_seed_range.sh \
-    weight_sort 200 299 auto out/weight_sort/my_model_spacing6   # evaluate</pre>
-  <p class="lead" style="margin-top:10px">Full installation, asset preparation, data generation and
-  evaluation instructions live in the <a href="doc/index.html"><b>Document</b></a> page.</p>
+<section id="resources" class="section wrap">
+  <p class="eyebrow">Resources</p><h2>Explore the benchmark.</h2>
+  <div class="resource-grid"><a href="leaderboard.html"><strong>Results tables <span aria-hidden="true">↗</span></strong><span>All simulation and real-world outcomes from the submitted manuscript.</span></a><a href="tasks.html"><strong>Task descriptions <span aria-hidden="true">↗</span></strong><span>Physical variations and task-specific completion conditions.</span></a><a href="doc/index.html"><strong>Evaluation protocol <span aria-hidden="true">↗</span></strong><span>Observations, training, controllers, seeds, and action horizons.</span></a><a href="results/leaderboard.json"><strong>Results data <span aria-hidden="true">↗</span></strong><span>Machine-readable values for both reported results tables.</span></a></div>
+  <div class="availability"><h3>Release availability</h3><p><strong>Paper:</strong> Submitted to ICRA 2027. A public paper download is not currently provided here.</p><p><strong>Code, demonstrations, and checkpoints:</strong> Public download links are not currently available. This page will be updated when releases are available.</p></div>
 </section>
 
-<section class="wrap sans">
-  <h2>News</h2>
-  <ul class="news" style="list-style:none">
-    <li><b>2026-08-29</b> &mdash; Code synchronized with the internal collection master; sort-expert pipeline fixed.</li>
-    <li><b>2026-08-28</b> &mdash; Documentation restructure; release plan published.</li>
-    <li><b>2026-08-26</b> &mdash; Initial public scaffold: 8 task definitions, frozen contract, tests, provenance audit.</li>
-  </ul>
+<section id="citation" class="section wrap citation"><p class="eyebrow">Citation</p><h2>Reference this project.</h2><p class="fineprint">Submission-stage reference; this is not an accepted conference publication.</p>
+<pre><code>@misc{han2026forcebench,
+  title   = {ForceBench: Benchmarking Force Integration for Robotic Manipulation},
+  author  = {Han, Xuan and Jin, Zinuo and Li, Tianlin and Lou, Yunfan and
+             Liu, Xin and Xue, Yuchen and He, Yuanpeng and Yao, Boxian and
+             Zhan, Shuhan and Wu, Ruihai and Pang, Zhibo},
+  year    = {2026},
+  note    = {Submitted to ICRA 2027},
+  url     = {https://forcebench-platform.github.io/}
+}</code></pre>
 </section>
-
-<section class="wrap" id="citation">
-  <h2>Citation</h2>
-  <p class="lead sans">The paper is in preparation; a BibTeX entry will appear here with the arXiv release.</p>
-  <pre>@misc{forcebench2026,
-  title  = {ForceBench: A Contact-Rich Manipulation Benchmark
-            That Actually Tests Force Perception},
-  author = {Han, Xuan and Jin, Zinuo and Li, Tianlin and Liu, Xin and
-            Xue, Yuchen and Zhan, Shuhan and Lou, Yunfan and Yao, Boxian
-            and Wu, Ruihai and Pang, Zhibo},
-  year   = {2026},
-  note   = {https://github.com/forcebench-platform/ForceBench}
-}</pre>
-</section>
-
-<footer class="sans">
-  ForceBench &middot; <a href="https://github.com/forcebench-platform/ForceBench">GitHub</a> &middot;
-  <a href="doc/index.html">Documentation</a> &middot; <a href="leaderboard.html">Leaderboard</a><br>
-  Dataset &amp; checkpoints: to be released after paper submission (see
-  <a href="https://github.com/forcebench-platform/ForceBench/blob/main/docs/release_plan.md">release plan</a>).
-</footer>
+</main>
+<footer><div class="wrap"><p><a class="brand" href="./">Force<span>Bench</span></a> · Submitted to ICRA 2027</p><p>Updated September 2026 · <a href="about.html">About &amp; citation</a> · <a href="doc/index.html">Protocol</a> · <a href="leaderboard.html">Results</a></p></div></footer>
 </body>
 </html>

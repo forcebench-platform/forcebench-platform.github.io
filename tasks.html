@@ -1,94 +1,30 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>任务说明 —— ForceBench</title>
-<meta name="description" content="ForceBench 的八个任务：五个力分类任务与三个接触密集任务，以及两类任务的关键区别。">
-<link rel="stylesheet" href="./assets/style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tasks | ForceBench</title>
+<meta name="description" content="The eight ForceBench tasks span physical-property inference, resistance-dependent interaction, and contact-rich assembly.">
+<link rel="stylesheet" href="./assets/supporting-pages.css">
 </head>
-<body data-page="tasks">
-<a class="skip-link" href="#main">跳到正文</a>
-
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="./index.html">ForceBench <span class="ver">v0.1 原型</span></a>
-    <nav class="site-nav" aria-label="主导航">
-      <ul>
-        <li><a href="./index.html" data-nav="home">首页</a></li>
-        <li><a href="./leaderboard.html" data-nav="leaderboard">Leaderboard</a></li>
-        <li><a href="./tasks.html" data-nav="tasks">任务说明</a></li>
-        <li><a href="https://github.com/forcebench-platform/ForceBench/tree/main/docs">文档<span class="ext-mark" aria-hidden="true">↗</span><span class="visually-hidden">（GitHub 上的 markdown 文档，外部链接）</span></a></li>
-        <li><span class="nav-pending">论文<span class="pending-mark">准备中</span><span class="visually-hidden">：论文尚未发表，因此没有链接</span></span></li>
-        <li><a href="./about.html" data-nav="about">关于与引用</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<main id="main">
-  <div class="wrap">
-    <h1>八个任务</h1>
-    <p class="lede">八个任务共用同一套机器人、控制器、观测和策略接口，但它们并不是同一种东西 ——
-    只有其中五个真正把「必须靠力才能判断」写进了任务设定。这个区别在本站任何地方都不会被抹掉。</p>
-
-    <div id="sample-slot"></div>
-
-    <div class="note info">
-      <span class="note-title">本页是概览，正式定义在仓库里</span>
-      <p>逐任务的文档卡片在
-      <a href="https://github.com/forcebench-platform/ForceBench/tree/main/docs/tasks">
-      <code>docs/tasks/</code></a>，每张卡片下方都有链接。
-      但任务的<b>权威</b>定义始终是代码：<code>forcebench/tasks/&lt;name&gt;/</code> 下的
-      <code>spec.py</code> 与 <code>runtime.py</code>。文档与代码不一致时，以代码为准。</p>
-    </div>
-
-    <h2><span class="cat force_classification"><span class="glyph" aria-hidden="true">◆</span>力分类任务</span>（5 个）</h2>
-    <p class="muted">这五个任务里，决定「怎样做才算对」的那个物体属性在视觉上<b>完全不可观测</b>：
-    箱子外观一模一样但轻重不同，包裹总质量固定但配重位置不同，旋钮/手柄的卡位只有力矩才能感知，
-    抽屉的起拉阻力也只能拉了才知道。力是唯一携带这些信息的通道 —— 策略要么用力，要么只能靠猜。</p>
-    <div class="grid cols-2" id="tasks-fc"></div>
-
-    <h2><span class="cat contact_rich"><span class="glyph" aria-hidden="true">■</span>接触密集任务</span>（3 个）</h2>
-    <p class="muted">这三个任务接触丰富，作为操作任务本身是有意义的，但必须如实说明：</p>
-    <div class="note caution">
-      <span class="note-title">⚠ 当前判分并不检验力感知</span>
-      <p>截至 v0.1，这三个任务的成功判定<b>只检查最终位姿</b>（是否居中/就位/对齐/松开/退回），
-      从不读取 wrench 信号；<code>peg_insert</code> 的 spec 里甚至完全没有力或质量相关的常量。
-      它们的 MANIFEST 描述里写着 "force-sensitive"，但这个措辞是<b>前瞻性的</b>，
-      超出了当前实现真正要求和真正测量的东西 —— 在加入依赖力的成功判据之前，请把那句话当作愿景而非事实。</p>
-      <p>换句话说：它们是有用的接触密集操作任务，但<b>还不能</b>像上面五个任务那样，被当作支持或反对「力感知有用」的证据。</p>
-    </div>
-    <div class="grid cols-2" id="tasks-cr"></div>
-
-    <h2>共用的仿真契约</h2>
-    <p class="muted">八个任务共用同一套机器人 / 控制器 / 观测 / 数据契约，
-    详见仓库的 <code>docs/BENCHMARK_STANDARDIZATION.md</code> 与 <code>docs/PROJECT_GUIDE.md</code>。
-    策略侧的接口是「一个 <code>PolicyObservation</code> 进，一个 <code>PolicyActionChunk</code> 出」
-    （15 Hz，世界坐标系下的绝对 TCP 位姿 + 夹爪），见
-    <code>forcebench/policy_adapters/README.md</code>。</p>
-
-    <p class="small muted" id="tasks-source"></p>
-
-    <p><a class="btn" href="./leaderboard.html">查看这些任务的评测结果</a></p>
-
-  </div>
-</main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <div>
-      <p><b>ForceBench</b> v0.1 原型 · 代码采用 MIT 许可</p>
-      <p>任务的权威定义以仓库中的 <code>spec.py</code> / <code>runtime.py</code> 为准。</p>
-    </div>
-    <div>
-      <p><a href="https://github.com/forcebench-platform/ForceBench">github.com/forcebench-platform/ForceBench</a></p>
-      <p class="small">本站为纯静态页面，数据实时读取自仓库内的 <code>results/leaderboard.json</code>。</p>
-    </div>
-  </div>
-</footer>
-
-<script src="./assets/data.js"></script>
-<script src="./assets/render.js"></script>
-</body>
-</html>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="site-nav" aria-label="Main navigation"><div class="wrap nav-inner"><a class="brand" href="./index.html">Force<span>Bench</span></a><div class="nav-links"><a href="./index.html">Home</a><a href="./tasks.html" aria-current="page">Tasks</a><a href="./leaderboard.html">Results</a><a href="./doc/index.html">Protocol</a><a href="./about.html">About &amp; citation</a></div></div></nav>
+<main id="main" class="wrap">
+<header class="page-hero"><p class="eyebrow">Benchmark tasks</p><h1>Eight tasks. Three manipulation demands.</h1><p class="lede">ForceBench evaluates how wrist force and torque support physical-property inference, resistance-dependent interaction, and contact-rich assembly under a shared simulation protocol.</p><div class="stat-line"><span>2 property-inference tasks</span><span>5 resistance-dependent tasks</span><span>1 assembly task</span></div><div class="toc"><a href="#property">Physical properties</a><a href="#resistance">Resistance</a><a href="#assembly">Assembly</a><a href="#scoring">Success criteria</a></div></header>
+<section id="property" class="section"><h2>Physical-property inference</h2><p class="section-intro">The robot interacts with a parcel, infers its physical condition, and chooses the corresponding destination. Appearance is shared across conditions.</p><div class="cards">
+<article class="card" id="weight-sort"><span class="number">01 / WeightSort</span><h3>Weight Sort</h3><p>Lift a parcel and place it in the black container if light or the blue container if heavy.</p><p class="mechanism"><strong>Physical variation:</strong> Visually identical parcels have different masses.</p><p class="mechanism"><strong>Complete success:</strong> Correct destination, placement, release, and settling.</p></article>
+<article class="card" id="com-sort"><span class="number">02 / CoMSort</span><h3>CoM Sort</h3><p>Hold the parcel steadily, then place a centered parcel on the conveyor or an imbalanced parcel in the basket.</p><p class="mechanism"><strong>Physical variation:</strong> Identical appearance and total mass, with centered or offset centers of mass and different rotational loads about the grasp.</p><p class="mechanism"><strong>Complete success:</strong> Correct destination and placement, with release and settling.</p></article>
+</div></section>
+<section id="resistance" class="section"><h2>Resistance-dependent interaction</h2><p class="section-intro">The robot must adapt its motion direction, engagement, or stopping point to resistance encountered during interaction.</p><div class="cards">
+<article class="card" id="faucet-turn"><span class="number">03 / FaucetTurn</span><h3>Faucet Turn</h3><p>Open a valve against resistance that rises to a peak and then drops. Stop in the target region just beyond that transition.</p><p class="mechanism"><strong>Physical variation:</strong> The resistance-peak angle varies across instances.</p><p class="mechanism"><strong>Complete success:</strong> Reach the target region, release and withdraw, and leave the water on with the handle stationary.</p></article>
+<article class="card" id="faucet-direction"><span class="number">04 / FaucetDirection</span><h3>Faucet Direction</h3><p>Find the lower-resistance rotation direction and cross its resistance peak, leaving the valve open.</p><p class="mechanism"><strong>Physical variation:</strong> Both the lower-resistance direction and peak location vary.</p><p class="mechanism"><strong>Complete success:</strong> Cross the peak in the correct direction, release, withdraw, and leave the valve stationary. The final-angle criterion has a lower bound and no upper bound.</p></article>
+<article class="card" id="stove-turn"><span class="number">05 / StoveTurn</span><h3>Stove Turn</h3><p>Grasp and rotate a stove knob through an ignition resistance transition.</p><p class="mechanism"><strong>Physical variation:</strong> The transition occurs at different angles across instances.</p><p class="mechanism"><strong>Complete success:</strong> Cross the transition, reach the prescribed terminal angle, and activate the flame.</p></article>
+<article class="card" id="stove-press"><span class="number">06 / StovePress</span><h3>Stove Press</h3><p>Depress a spring-loaded knob to permit rotation, then turn it through the ignition transition in the lower-resistance direction.</p><p class="mechanism"><strong>Physical variation:</strong> The direction and resistance-peak location vary.</p><p class="mechanism"><strong>Complete success:</strong> Coordinate axial engagement and rotation to achieve ignition.</p></article>
+<article class="card" id="drawer-pull"><span class="number">07 / DrawerPull</span><h3>Drawer Pull</h3><p>Pull a drawer into a rising-resistance region and stop at the opening corresponding to a specified resistance level.</p><p class="mechanism"><strong>Physical variation:</strong> Resistance onset, extent, and breakaway resistance vary.</p><p class="mechanism"><strong>Complete success:</strong> Stop in the target opening range, release, and leave the drawer stable. Pulling beyond the mechanism’s limit is a failure.</p></article>
+</div></section>
+<section id="assembly" class="section"><h2>Contact-rich assembly</h2><p class="section-intro">Assembly tests constrained rotational insertion, complementing the property and resistance tasks.</p><div class="cards">
+<article class="card" id="nut-thread"><span class="number">08 / NutThread</span><h3>Nut Thread</h3><p>Align a grasped nut with a bolt, engage the threads, and rotate the nut down to a prescribed threaded height.</p><p class="mechanism"><strong>Physical variation:</strong> The target bolt position varies across instances.</p><p class="mechanism"><strong>Complete success:</strong> Reach the threaded target height while centered and upright, then release and withdraw. Under the task’s physical constraints, reaching this target assembly state implies correct thread engagement and screw-in insertion.</p></article>
+</div></section>
+<section id="scoring" class="section"><h2>Physical decisions and complete execution</h2><p>Success is evaluated using the full task-specific requirements. A correct destination, angle, or assembly state alone may not be enough: release, clearance, stability, and completion events also matter where specified.</p><div class="callout"><p>The first two categories vary physical conditions without distinct visual appearances. These conditions can still affect visible motion and proprioception. The benchmark therefore measures the <strong>additional benefit of force</strong>, rather than assuming that force is the only possible source of information.</p></div><p>All tasks use a Franka arm with a parallel gripper, synchronized observations and actions, and seeded evaluation. See the protocol for the observation interface, controller, action chunks, and episode budget.</p><div class="actions"><a class="button" href="./doc/index.html">Read the evaluation protocol</a><a class="button" href="./leaderboard.html">Explore submitted-paper results</a></div></section>
+</main><footer class="footer"><div class="wrap"><p>ForceBench · Submitted to ICRA 2027</p><p>Task descriptions follow the submitted manuscript. <a href="./index.html#resources">Release availability is listed on the project homepage.</a></p></div></footer>
+</body></html>
