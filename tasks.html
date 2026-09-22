@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow, noarchive"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tasks | ForceBench</title>
 <meta name="description" content="The eight ForceBench tasks span physical-property inference, resistance-dependent interaction, and contact-rich assembly.">
 <link rel="stylesheet" href="./assets/supporting-pages.css">
@@ -27,5 +26,5 @@
 <article class="card" id="nut-thread"><span class="number">08 / NutThread</span><h3>Nut Thread</h3><p>Align a grasped nut with a bolt, engage the threads, and rotate the nut down to a prescribed threaded height.</p><p class="mechanism"><strong>Physical variation:</strong> The target bolt position varies across instances.</p><p class="mechanism"><strong>Complete success:</strong> Reach the threaded target height while centered and upright, then release and withdraw. Under the task’s physical constraints, reaching this target assembly state implies correct thread engagement and screw-in insertion.</p></article>
 </div></section>
 <section id="scoring" class="section"><h2>Physical decisions and complete execution</h2><p>Success is evaluated using the full task-specific requirements. A correct destination, angle, or assembly state alone may not be enough: release, clearance, stability, and completion events also matter where specified.</p><div class="callout"><p>The first two categories vary physical conditions without distinct visual appearances. These conditions can still affect visible motion and proprioception. The benchmark therefore measures the <strong>additional benefit of force</strong>, rather than assuming that force is the only possible source of information.</p></div><p>All tasks use a Franka arm with a parallel gripper, synchronized observations and actions, and seeded evaluation. See the protocol for the observation interface, controller, action chunks, and episode budget.</p><div class="actions"><a class="button" href="./doc/index.html">Read the evaluation protocol</a><a class="button" href="./leaderboard.html">Explore submitted-paper results</a></div></section>
-</main><footer class="footer"><div class="wrap"><p>ForceBench · Submitted to ICRA 2027</p><p>Task descriptions follow the submitted manuscript. <a href="./index.html#resources">Release availability is listed on the project homepage.</a></p></div></footer>
+</main><footer class="footer"><div class="wrap"><p>ForceBench</p><p>Task descriptions follow the submitted manuscript. <a href="./index.html#resources">Release availability is listed on the project homepage.</a></p></div></footer>
 </body></html>

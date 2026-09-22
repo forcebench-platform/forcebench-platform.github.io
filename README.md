@@ -2,8 +2,8 @@
 
 Static research website at https://forcebench-platform.github.io/.
 Content follows the September 2026 submitted manuscript,
-**ForceBench: Benchmarking Force Integration for Robotic Manipulation**,
-submitted to ICRA 2027. Submission is not acceptance.
+**ForceBench: Benchmarking Force Integration for Robotic Manipulation**.
+Submission is not acceptance.
 
 ## Pages and assets
 
