@@ -7,7 +7,7 @@ Submission is not acceptance.
 
 ## Pages and assets
 
-- `index.html`: project overview, exact submitted abstract, paper figures,
+- `index.html`: project overview video, exact submitted abstract, paper figures,
   methods, findings, resource availability, and citation.
 - `tasks.html`: eight simulation tasks and completion criteria.
 - `doc/index.html`: training, observations, control, and evaluation protocol.
@@ -19,6 +19,12 @@ Submission is not acceptance.
 - `about.html`: project identity, author list, and submission-stage citation.
 - `assets/figures/`: cropped WebP renders of the submitted manuscript's
   original figure assets. The confidential review PDF is not distributed.
+- `assets/videos/forcebench-overview.mp4`: the submitted overview video,
+  preserved byte-for-byte (171.87 seconds, 1280 × 720 H.264/AAC,
+  18,153,961 bytes). SHA-256:
+  `0a103e453803e9e444728c2de7b33cf2845b7d3cbfcfcb377acc42bb56b00f9b`.
+  The homepage uses native controls, inline mobile playback, and no autoplay;
+  `preload="none"` avoids fetching the full video before visitors choose to play.
 - `sample_leaderboard.json`: retirement notice for the old prototype schema;
   no page loads illustrative or fabricated sample results.
 
